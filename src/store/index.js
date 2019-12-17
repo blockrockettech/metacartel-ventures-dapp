@@ -165,7 +165,7 @@ export default new Vuex.Store({
             commit('approvedBalance', approvedBalance);
         },
 
-        async deposit({commit, state}, wethRequired) {
+        deposit({commit, state}, wethRequired) {
             console.log('deposit TX', wethRequired);
 
             return new Promise((resolve, reject) => {

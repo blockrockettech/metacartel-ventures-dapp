@@ -118,7 +118,8 @@
                                 </div>
                             </div>
                             <div class="col-4" v-if="approvedBalance">
-                                <div class="card text-white mb-3" :class="{'bg-success': approvedBalance && parseFloat(toEther(approvedBalance)) >= parseFloat(form.tributeOffered), 'bg-warning': approvedBalance && parseFloat(toEther(approvedBalance)) < parseFloat(form.tributeOffered)}">
+                                <div class="card text-white mb-3"
+                                     :class="{'bg-success': approvedBalance && parseFloat(toEther(approvedBalance)) >= parseFloat(form.tributeOffered), 'bg-warning': approvedBalance && parseFloat(toEther(approvedBalance)) < parseFloat(form.tributeOffered)}">
                                     <div class="card-header">Allowance</div>
                                     <div class="card-body">
                                         <h5 class="card-title">
@@ -201,6 +202,8 @@
                     tributeOffered: null,
                     details: null,
                 },
+
+                count: 0
             };
         },
         components: {
@@ -240,19 +243,32 @@
                 return true;
             },
 
-            async convertEthToWeth() {
+            convertEthToWeth() {
                 console.log('Convert ETH to wETH');
 
-                try {
-                    if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
-                        await this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10));
-                    }
-                } catch (e) {
-                    console.error('allowance failure:', e);
-                    return false;
-                }
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        console.log('resolve 10000', this.count)
+                        resolve(true);
+                    }, 10000);
+                });
 
-                return true;
+                // return new Promise((resolve, reject) => {
+                //     try {
+                //         if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
+                //             this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10))
+                //                 .then(() => {
+                //                     console.log('DONE');
+                //                     resolve(true);
+                //                 });
+                //         } else {
+                //             resolve(true);
+                //         }
+                //     } catch (e) {
+                //         console.error('allowance failure:', e);
+                //         reject(false);
+                //     }
+                // });
             },
 
             async approveAllowance() {
@@ -310,7 +326,7 @@
         }
     }
 
-    .vue-form-wizard .wizard-nav-pills>li>a {
+    .vue-form-wizard .wizard-nav-pills > li > a {
         color: $xcopy3 !important;
     }
 

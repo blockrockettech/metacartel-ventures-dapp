@@ -248,10 +248,6 @@
                 alert('Yay. Done!');
             },
 
-            convertEthToWeth() {
-                return true;
-            },
-
             isFormValid() {
                 const {sharesRequested, tributeOffered, details } = this.form;
                 return sharesRequested && tributeOffered && details;
@@ -272,28 +268,21 @@
                 console.log('Convert ETH to wETH');
 
                 return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        console.log('resolve 10000', this.count)
-                        resolve(true);
-                    }, 10000);
+                    try {
+                        if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
+                            this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10))
+                                .then(() => {
+                                    console.log('DONE');
+                                    resolve(true);
+                                });
+                        } else {
+                            resolve(true);
+                        }
+                    } catch (e) {
+                        console.error('allowance failure:', e);
+                        reject(false);
+                    }
                 });
-
-                // return new Promise((resolve, reject) => {
-                //     try {
-                //         if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
-                //             this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10))
-                //                 .then(() => {
-                //                     console.log('DONE');
-                //                     resolve(true);
-                //                 });
-                //         } else {
-                //             resolve(true);
-                //         }
-                //     } catch (e) {
-                //         console.error('allowance failure:', e);
-                //         reject(false);
-                //     }
-                // });
             },
 
             async approveAllowance() {

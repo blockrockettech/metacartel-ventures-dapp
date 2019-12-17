@@ -165,7 +165,7 @@ export default new Vuex.Store({
             commit('approvedBalance', approvedBalance);
         },
 
-        deposit({commit, state}, wethRequired) {
+        async deposit({commit, state, dispatch}, wethRequired) {
             console.log('deposit TX', wethRequired);
 
             return new Promise((resolve, reject) => {
@@ -180,14 +180,17 @@ export default new Vuex.Store({
                         // notification popup
                         state.notifyInstance.hash(hash);
                     })
-                    .on('receipt', function (receipt) {
+                    .once('receipt', function (receipt) {
                         console.log('receipt', receipt);
 
                         dispatch('tokenBalance');
 
                         resolve(true);
                     })
-                    .on('error', reject);
+                    .on('error', function (error) {
+                        console.log('Error on deposit', error);
+                        reject(false);
+                    });
             });
         },
 

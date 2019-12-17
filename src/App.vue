@@ -9,6 +9,7 @@
                         <p>The transaction will be submitted to chain at the end of the checks</p>
                         <hr class="my-4">
                         <p>Your applicant address is <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <hr class="my-4">
                         <b-form>
                             <b-form-group
@@ -22,6 +23,8 @@
                                         type="number"
                                         min="1"
                                         step="1"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.sharesRequested && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -37,6 +40,8 @@
                                         type="number"
                                         min="1"
                                         step="1"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.tributeOffered && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -50,6 +55,8 @@
                                         id="input-1"
                                         v-model="form.details"
                                         type="text"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.details && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -63,6 +70,7 @@
                         <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
                         <hr class="my-4">
                         <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
                         <hr class="my-4">
                         <div class="row">
@@ -102,6 +110,7 @@
                         <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
                         <hr class="my-4">
                         <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
                         <hr class="my-4">
                         <div class="row">
@@ -198,6 +207,7 @@
         data() {
             return {
                 form: {
+                    dirty: false,
                     sharesRequested: null,
                     tributeOffered: null,
                     details: null,
@@ -212,6 +222,7 @@
         computed: {
             ...mapState([
                 'wethContract',
+                'molochContract',
                 'account',
                 'member',
                 'tokenBalance',
@@ -229,6 +240,10 @@
                 web3Connect.toggleModal();
             },
 
+            onFormInput() {
+              this.form.dirty = true;
+            },
+
             onComplete: function () {
                 alert('Yay. Done!');
             },
@@ -237,9 +252,19 @@
                 return true;
             },
 
-            prepareProposal() {
-                console.log('Proposal prepared', this.form);
+            isFormValid() {
+                const {sharesRequested, tributeOffered, details } = this.form;
+                return sharesRequested && tributeOffered && details;
+            },
 
+            prepareProposal() {
+                if (!this.isFormValid()) {
+                    this.form.dirty = true;
+                    console.log('Invalid proposal');
+                    return false;
+                }
+
+                console.log('Proposal prepared', this.form);
                 return true;
             },
 

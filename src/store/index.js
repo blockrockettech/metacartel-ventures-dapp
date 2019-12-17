@@ -7,7 +7,7 @@ import notifier from "../notifier";
 
 Vue.use(Vuex);
 
-const TokenJson = require("../truffle/Token");
+const WethJson = require("../truffle/wETH");
 const MolochJson = require("../truffle/Moloch");
 
 export default new Vuex.Store({
@@ -25,13 +25,13 @@ export default new Vuex.Store({
         notifyInstance: null,
 
         // Contracts
-        tokenContract: null,
+        wethContract: null,
         molochContract: null,
 
         tokenBalance: null,
         approvedBalance: null,
 
-        tokenSymbol: 'TKN',
+        tokenSymbol: 'wETH',
     },
     mutations: {
         networkDetails(state, {networkId, networkName, etherscanBase}) {
@@ -40,7 +40,7 @@ export default new Vuex.Store({
             state.etherscanBase = etherscanBase;
             state.notifyInstance = notifier(networkId);
 
-            state.tokenContract = new state.web3.eth.Contract(TokenJson.abi, TokenJson.networks[state.networkId].address);
+            state.wethContract = new state.web3.eth.Contract(WethJson.abi, WethJson.networks[state.networkId].address);
             state.molochContract = new state.web3.eth.Contract(MolochJson.abi, MolochJson.networks[state.networkId].address);
         },
 
@@ -156,20 +156,42 @@ export default new Vuex.Store({
         ////////////////////
 
         async tokenBalance({commit, state}) {
-            const tokenBalance = await state.tokenContract.methods.balanceOf(state.account).call();
+            const tokenBalance = await state.wethContract.methods.balanceOf(state.account).call();
             commit('tokenBalance', tokenBalance);
         },
 
         async approvedBalance({commit, state}) {
-            const approvedBalance = await state.tokenContract.methods.allowance(state.account, state.molochContract._address).call();
+            const approvedBalance = await state.wethContract.methods.allowance(state.account, state.molochContract._address).call();
             commit('approvedBalance', approvedBalance);
+        },
+
+        async deposit({commit, state}, wethRequired) {
+            console.log('deposit TX', wethRequired);
+
+            return new Promise((resolve, reject) => {
+                state.wethContract.methods.deposit()
+                    .send({
+                        from: state.account,
+                        value: state.web3.utils.toWei(wethRequired),
+                    })
+                    .once('transactionHash', (hash) => {
+                        // notification popup
+                        state.notifyInstance.hash(hash);
+                    })
+                    .on('receipt', function (receipt) {
+                        dispatch('tokenBalance');
+
+                        resolve(receipt);
+                    })
+                    .on('error', reject);
+            });
         },
 
         async allowance({commit, state}, allowanceRequired) {
             console.log('allowance TX', allowanceRequired);
 
             return new Promise((resolve, reject) => {
-                state.tokenContract.methods.approve(
+                state.wethContract.methods.approve(
                     state.molochContract._address,
                     state.web3.utils.toWei(allowanceRequired)
                 )
@@ -206,9 +228,9 @@ export default new Vuex.Store({
                     state.account,
                     form.sharesRequested,
                     state.web3.utils.toWei(form.tributeOffered),
-                    state.tokenContract._address,
+                    state.wethContract._address,
                     '0',
-                    state.tokenContract._address,
+                    state.wethContract._address,
                     form.details
                 )
                     .send({

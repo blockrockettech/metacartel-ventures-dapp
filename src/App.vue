@@ -3,12 +3,12 @@
         <div v-if="account">
             <form-wizard @on-complete="onComplete" shape="circle" color="#fd0c61">
                 <p slot="title"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></p>
-                <tab-content title="Submit proposal" :before-change="submitProposal">
+                <tab-content title="Prepare proposal" :before-change="prepareProposal">
                     <div class="jumbotron">
-                        <p class="lead">This is where you can submit your proposal to join the DAO</p>
+                        <p class="lead">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
+                        <p>The transaction will be submitted to chain at the end of the checks</p>
                         <hr class="my-4">
                         <p>Your applicant address is <code>{{ account }}</code></p>
-                        <p v-if="tokenContract">Tribute token address is <code>{{ tokenContract._address }}</code> aka {{ tokenSymbol }}</p>
                         <hr class="my-4">
                         <b-form>
                             <b-form-group
@@ -20,36 +20,26 @@
                                         id="input-1"
                                         v-model="form.sharesRequested"
                                         type="number"
+                                        min="1"
+                                        step="1"
                                         required
                                 ></b-form-input>
                             </b-form-group>
 
                             <b-form-group
                                     id="input-group-1"
-                                    label="Tribute offered:"
+                                    label="Tribute offered in wETH:"
                                     label-for="input-1"
-                                    description="This must be a 1 to 1 of shared to tribute">
+                                    description="Recommended: a 1 to 1 of shares requested to tribute offered ratio">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.tributeOffered"
                                         type="number"
+                                        min="1"
+                                        step="1"
                                         required
                                 ></b-form-input>
                             </b-form-group>
-
-                            <!--<b-form-group-->
-                            <!--id="input-group-1"-->
-                            <!--label="Tribute token:"-->
-                            <!--label-for="input-1"-->
-                            <!--description="Must be an approved token. wEth is our deposit token.">-->
-                            <!--<b-form-input-->
-                            <!--id="input-1"-->
-                            <!--v-model="form.tributeToken"-->
-                            <!--type="text"-->
-                            <!--required-->
-                            <!--placeholder="0x0"-->
-                            <!--&gt;</b-form-input>-->
-                            <!--</b-form-group>-->
 
                             <b-form-group
                                     id="input-group-1"
@@ -68,11 +58,51 @@
                     </div>
                 </tab-content>
 
-                <tab-content title="Balance & Approvals" :before-change="approveAllowance">
+                <tab-content title="wEth balance check" :before-change="convertEthToWeth">
+                    <div class="jumbotron">
+                        <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
+                        <hr class="my-4">
+                        <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
+                        <hr class="my-4">
+                        <div class="row">
+                            <div class="col-6" v-if="tokenBalance">
+                                <div class="card bg-info text-white mb-3">
+                                    <div class="card-header">wETH Balance</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            {{ toEther(tokenBalance) }} {{ tokenSymbol }}
+                                        </h5>
+                                        <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6" v-if="tokenBalance && parseFloat(toEther(tokenBalance)) < parseFloat(form.tributeOffered)">
+                                <div class="alert alert-warning">
+                                    You don't have enough wEth to submit your proposal of <strong>{{ form.tributeOffered }} {{ tokenSymbol }}</strong>.
+                                    You require <strong>{{ parseFloat(form.tributeOffered) - parseFloat(toEther(tokenBalance)) }} {{ tokenSymbol }}</strong> more.
+                                    <br/>
+                                    <br/>
+                                    Clicking "Next" will trigger a transaction to convert the required ETH to wETH in order for you to proceed.
+                                </div>
+                            </div>
+                            <div class="col-6" v-else>
+                                <div class="alert alert-info">
+                                    Yass! You have enough wEth for your proposal.
+                                    <br/>
+                                    Advance to the next step!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab-content>
+
+                <tab-content title="wEth approval check" :before-change="approveAllowance">
                     <div class="jumbotron">
                         <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
                         <hr class="my-4">
                         <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-4" v-if="tokenBalance">
@@ -115,6 +145,18 @@
                     </div>
                 </tab-content>
 
+                <tab-content title="Submit proposal" :before-change="submitProposal">
+                    <div class="jumbotron">
+                        <p class="lead">This is where you can check everything before submitting to the DAO</p>
+                        <hr class="my-4">
+                        <div class="row">
+                            <div class="col">
+                                <p>Click "next" to go fo</p>
+                            </div>
+                        </div>
+                    </div>
+                </tab-content>
+
                 <tab-content title="Summary">
                     <div class="jumbotron">
                         <p class="lead">This is where you can see you proposal</p>
@@ -138,8 +180,9 @@
             </form-wizard>
         </div>
         <div v-else class="mt-5">
-            <p>This DAO is on the blockchain - please sign in to make a proposal</p>
-            <button class="btn btn-secondary btn-lg btn-block" @click="onLogin">Sign in</button>
+            <h1 class="text-center"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></h1>
+            <p class="text-center">This DAO is on the blockchain - please sign in to make a proposal</p>
+            <button class="btn btn-outline-info btn-lg btn-block" @click="onLogin">Sign in</button>
         </div>
     </div>
 </template>
@@ -165,7 +208,7 @@
         },
         computed: {
             ...mapState([
-                'tokenContract',
+                'wethContract',
                 'account',
                 'member',
                 'tokenBalance',
@@ -187,8 +230,27 @@
                 alert('Yay. Done!');
             },
 
-            submitProposal() {
-                console.log('Proposal submitted', this.form);
+            convertEthToWeth() {
+                return true;
+            },
+
+            prepareProposal() {
+                console.log('Proposal prepared', this.form);
+
+                return true;
+            },
+
+            async convertEthToWeth() {
+                console.log('Convert ETH to wETH');
+
+                try {
+                    if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
+                        await this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10));
+                    }
+                } catch (e) {
+                    console.error('allowance failure:', e);
+                    return false;
+                }
 
                 return true;
             },
@@ -204,6 +266,12 @@
                     console.error('allowance failure:', e);
                     return false;
                 }
+
+                return true;
+            },
+
+            async submitProposal() {
+                console.log('Proposal submitted', this.form);
 
                 try {
                     await this.$store.dispatch('submitProposal', this.form);
@@ -224,10 +292,6 @@
 </script>
 
 <style lang="scss">
-
-
-    // Your variable overrides can go here, e.g.:
-    // $h1-font-size: 3rem;
 
     @import "./assets/_variables";
     @import '../node_modules/bootstrap/scss/bootstrap';

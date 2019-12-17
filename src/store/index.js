@@ -175,13 +175,17 @@ export default new Vuex.Store({
                         value: state.web3.utils.toWei(wethRequired),
                     })
                     .once('transactionHash', (hash) => {
+                        console.log('hash', hash);
+
                         // notification popup
                         state.notifyInstance.hash(hash);
                     })
                     .on('receipt', function (receipt) {
+                        console.log('receipt', receipt);
+
                         dispatch('tokenBalance');
 
-                        resolve(receipt);
+                        resolve(true);
                     })
                     .on('error', reject);
             });
@@ -199,13 +203,17 @@ export default new Vuex.Store({
                         from: state.account
                     })
                     .once('transactionHash', (hash) => {
+                        console.log('hash', hash);
+
                         // notification popup
                         state.notifyInstance.hash(hash);
-
-                        resolve(hash);
                     })
                     .on('receipt', function (receipt) {
+                        console.log('receipt', receipt);
+
                         dispatch('approvedBalance');
+
+                        resolve(true);
                     })
                     .on('error', reject);
             });

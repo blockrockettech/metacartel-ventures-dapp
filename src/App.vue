@@ -324,19 +324,19 @@
 
     .vue-form-wizard .wizard-icon-circle {
         background-color: $xcopy1 !important;
-        border-color: $xcopy2 !important;
+        border-color: $xcopy3 !important;
 
         .step-title {
-            color: $xcopy2 !important;;
+            color: $xcopy3 !important;;
         }
     }
 
     .vue-form-wizard .wizard-nav-pills>li>a {
-        color: $xcopy1 !important;
+        color: $xcopy3 !important;
     }
 
     .vue-form-wizard .wizard-icon-circle .wizard-icon {
-        color: $xcopy2 !important;
+        color: $xcopy3 !important;
     }
 
     .fade-enter-active, .fade-leave-active {

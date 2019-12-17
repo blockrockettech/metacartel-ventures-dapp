@@ -229,38 +229,5 @@ export default new Vuex.Store({
                     .on('error', reject);
             });
         },
-
-
-        //
-        // async availableDrawDownAmount({commit, state, getters}) {
-        //     if (getters.hasValidSchedule(state)) {
-        //         const availableToDrawnDown = await state.vestingContract.methods.availableDrawDownAmount(state.account).call();
-        //         commit('availableToDrawnDown', availableToDrawnDown);
-        //     }
-        //
-        // },
-        //
-        // drawDown({dispatch, state}) {
-        //     return new Promise((resolve, reject) => {
-        //         state.vestingContract.methods.drawDown()
-        //             .send({
-        //                 from: state.account
-        //             })
-        //             .once('transactionHash', (hash) => {
-        //                 // notification popup
-        //                 state.notifyInstance.hash(hash);
-        //
-        //                 resolve(hash);
-        //             })
-        //             .on('receipt', function(receipt){
-        //                 dispatch('balanceOfAccount');
-        //
-        //                 dispatch('vestingScheduleForBeneficiary');
-        //
-        //                 dispatch('availableDrawDownAmount');
-        //             })
-        //             .on('error', reject);
-        //     });
-        // },
     },
 });

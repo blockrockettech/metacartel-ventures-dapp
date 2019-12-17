@@ -8,7 +8,7 @@
                         <p class="lead">This is where you can submit your proposal to join the DAO</p>
                         <hr class="my-4">
                         <p>Your applicant address is <code>{{ account }}</code></p>
-                        <p v-if="tokenContract">Tribute token address is <code>{{ tokenContract._address }}</code></p>
+                        <p v-if="tokenContract">Tribute token address is <code>{{ tokenContract._address }}</code> aka {{ tokenSymbol }}</p>
                         <hr class="my-4">
                         <b-form>
                             <b-form-group

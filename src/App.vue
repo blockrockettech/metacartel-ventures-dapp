@@ -22,6 +22,8 @@
                                         type="number"
                                         min="1"
                                         step="1"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.sharesRequested && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -37,6 +39,8 @@
                                         type="number"
                                         min="1"
                                         step="1"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.tributeOffered && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -50,6 +54,8 @@
                                         id="input-1"
                                         v-model="form.details"
                                         type="text"
+                                        @input="onFormInput"
+                                        v-bind:class="{ 'border-danger': !form.details && form.dirty }"
                                         required
                                 ></b-form-input>
                             </b-form-group>
@@ -197,6 +203,7 @@
         data() {
             return {
                 form: {
+                    dirty: false,
                     sharesRequested: null,
                     tributeOffered: null,
                     details: null,
@@ -226,6 +233,10 @@
                 web3Connect.toggleModal();
             },
 
+            onFormInput() {
+              this.form.dirty = true;
+            },
+
             onComplete: function () {
                 alert('Yay. Done!');
             },
@@ -234,9 +245,19 @@
                 return true;
             },
 
-            prepareProposal() {
-                console.log('Proposal prepared', this.form);
+            isFormValid() {
+                const {sharesRequested, tributeOffered, details } = this.form;
+                return sharesRequested && tributeOffered && details;
+            },
 
+            prepareProposal() {
+                if (!this.isFormValid()) {
+                    this.form.dirty = true;
+                    console.log('Invalid proposal');
+                    return false;
+                }
+
+                console.log('Proposal prepared', this.form);
                 return true;
             },
 

@@ -246,7 +246,13 @@
         }
     }
 
+    .vue-form-wizard .wizard-nav-pills>li>a {
+        color: $xcopy1 !important;
+    }
 
+    .vue-form-wizard .wizard-icon-circle .wizard-icon {
+        color: $xcopy2 !important;
+    }
 
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s

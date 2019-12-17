@@ -59679,6 +59679,10 @@
     "version": "0.5.3+commit.10d17f24.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "address": "0xdd2CCF7b1D6688E81E2Ed14E9600E96eB15041C7",
+      "transactionHash": "0x7fe0f034ad3137da3d323953580d6e1f7acf39d294e589b9d0b6bdcec8d691ba"
+    },
     "5777": {
       "events": {
         "0x1f613e805a2b7ba7cf49b3da3d6d784b943928d755fcf10a1dd8efa41f6e9b72": {

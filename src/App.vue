@@ -161,7 +161,7 @@
                         <hr class="my-4">
                         <div class="row">
                             <div class="col">
-                                <p>Click "next" to go fo</p>
+                                <p>Click "next" to go for it</p>
                             </div>
                         </div>
                     </div>

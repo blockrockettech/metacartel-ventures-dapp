@@ -9,6 +9,7 @@
                         <p>The transaction will be submitted to chain at the end of the checks</p>
                         <hr class="my-4">
                         <p>Your applicant address is <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <hr class="my-4">
                         <b-form>
                             <b-form-group
@@ -69,6 +70,7 @@
                         <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
                         <hr class="my-4">
                         <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
                         <hr class="my-4">
                         <div class="row">
@@ -108,6 +110,7 @@
                         <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
                         <hr class="my-4">
                         <p>Applicant <code>{{ account }}</code></p>
+                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
                         <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
                         <hr class="my-4">
                         <div class="row">
@@ -216,6 +219,7 @@
         computed: {
             ...mapState([
                 'wethContract',
+                'molochContract',
                 'account',
                 'member',
                 'tokenBalance',

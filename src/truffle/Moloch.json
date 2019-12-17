@@ -59680,10 +59680,6 @@
   },
   "networks": {
     "4": {
-      "address": "0xdd2CCF7b1D6688E81E2Ed14E9600E96eB15041C7",
-      "transactionHash": "0x7fe0f034ad3137da3d323953580d6e1f7acf39d294e589b9d0b6bdcec8d691ba"
-    },
-    "5777": {
       "events": {
         "0x1f613e805a2b7ba7cf49b3da3d6d784b943928d755fcf10a1dd8efa41f6e9b72": {
           "anonymous": false,
@@ -59901,12 +59897,12 @@
         }
       },
       "links": {},
-      "address": "0x478A8569d3C818fa301C25Db5dc4F5980124B50b",
-      "transactionHash": "0x3771a475c9dbe1ddb159ad8c32e11b2069b1ee89ae671dbbf9513c23833747b5"
+      "address": "0xbbC5caEb5807296d495f3832a4157686abDb2E05",
+      "transactionHash": "0xafa430c99511f246afc1f13b2644fa16c5d30459a3b94fd58b3187c739c387d1"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-16T11:43:30.343Z",
+  "updatedAt": "2019-12-17T13:40:49.964Z",
   "devdoc": {
     "methods": {}
   },

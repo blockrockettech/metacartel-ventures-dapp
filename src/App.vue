@@ -6,7 +6,6 @@
                 <tab-content title="Prepare proposal" :before-change="prepareProposal">
                     <div class="jumbotron">
                         <p class="lead">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
-                        <p>The transaction will be submitted to chain at the end of the checks</p>
                         <hr class="my-4">
                         <p>Your applicant address is <code>{{ account }}</code></p>
                         <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
@@ -75,13 +74,28 @@
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-6" v-if="tokenBalance">
-                                <div class="card bg-info text-white mb-3">
-                                    <div class="card-header">wETH Balance</div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            {{ toEther(tokenBalance) }} {{ tokenSymbol }}
-                                        </h5>
-                                        <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="card bg-info text-white mb-3">
+                                            <div class="card-header">wETH Balance</div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    {{ toEther(tokenBalance) }} {{ tokenSymbol }}
+                                                </h5>
+                                                <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card bg-danger text-white mb-3">
+                                            <div class="card-header">ETH Balance</div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    {{ accountBalanceInEth }} ETH
+                                                </h5>
+                                                <p class="card-text">Your current ETH balance.</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -202,6 +216,9 @@
     import CurrentNetwork from '@/components/CurrentNetwork.vue';
     import web3Connect from '@/web3ConnectService';
 
+    import {utils} from 'web3';
+    const {BN, fromWei} = utils;
+
     export default {
         name: 'App',
         data() {
@@ -224,6 +241,7 @@
                 'wethContract',
                 'molochContract',
                 'account',
+                'accountBalance',
                 'member',
                 'tokenBalance',
                 'approvedBalance',
@@ -233,7 +251,19 @@
             ...mapGetters([
                 'toEther',
                 'toEtherFixed',
-            ])
+            ]),
+            tributeOfferedAsWei() {
+                return new BN(this.form.tributeOffered).mul(new BN('10').pow(new BN('18')));
+            },
+            tokenBalanceAsBN() {
+                return new BN(this.tokenBalance);
+            },
+            approvedBalanceAsBN() {
+                return new BN(this.approvedBalance);
+            },
+            accountBalanceInEth() {
+                return Number(fromWei(this.accountBalance)).toFixed(4);
+            }
         },
         methods: {
             onLogin() {
@@ -269,8 +299,31 @@
 
                 return new Promise((resolve, reject) => {
                     try {
-                        if (parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
-                            this.$store.dispatch('deposit', (parseFloat(this.form.tributeOffered) - parseFloat(this.web3.utils.fromWei(this.tokenBalance, 'ether'))).toString(10))
+                        if (this.tokenBalanceAsBN.lt(this.tributeOfferedAsWei)) {
+                            const wEthRequiredInWei = this.tributeOfferedAsWei.sub(this.tokenBalanceAsBN);
+                            const wEthRequired = fromWei(wEthRequiredInWei, 'ether').toString();
+                            this.$store.dispatch('deposit', wEthRequired)
+                                .then(() => {
+                                    console.log('DONE');
+                                    resolve(true);
+                                });
+                        } else {
+                            resolve(true);
+                        }
+                    } catch (e) {
+                        console.error('deposit failure (promise reject):', e);
+                        reject(false);
+                    }
+                });
+            },
+
+            async approveAllowance() {
+                console.log('Approval submitted');
+
+                return new Promise((resolve, reject) => {
+                    try {
+                        if (this.approvedBalanceAsBN.lt(this.tributeOfferedAsWei)) {
+                            this.$store.dispatch('allowance', this.form.tributeOffered)
                                 .then(() => {
                                     console.log('DONE');
                                     resolve(true);
@@ -283,21 +336,6 @@
                         reject(false);
                     }
                 });
-            },
-
-            async approveAllowance() {
-                console.log('Approval submitted');
-
-                try {
-                    if (parseFloat(this.web3.utils.fromWei(this.approvedBalance, 'ether')) < parseFloat(this.form.tributeOffered)) {
-                        await this.$store.dispatch('allowance', this.form.tributeOffered);
-                    }
-                } catch (e) {
-                    console.error('allowance failure:', e);
-                    return false;
-                }
-
-                return true;
             },
 
             async submitProposal() {

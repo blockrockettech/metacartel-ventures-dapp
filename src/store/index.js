@@ -19,6 +19,7 @@ export default new Vuex.Store({
 
         // Account
         account: null,
+        accountBalance: null,
         member: null,
 
         web3: null,
@@ -54,6 +55,10 @@ export default new Vuex.Store({
 
         tokenBalance(state, tokenBalance) {
             state.tokenBalance = tokenBalance;
+        },
+
+        accountBalance(state, accountBalance) {
+            state.accountBalance = accountBalance;
         },
 
         approvedBalance(state, approvedBalance) {
@@ -106,6 +111,7 @@ export default new Vuex.Store({
                     const account = accounts[0];
                     commit('account', account);
 
+                    dispatch('accountBalance', account);
                     dispatch('tokenBalance');
                     dispatch('approvedBalance');
 
@@ -151,6 +157,11 @@ export default new Vuex.Store({
             }
         },
 
+        async accountBalance({commit}, account) {
+            const balance = await web3.eth.getBalance(account);
+            commit('accountBalance', balance);
+        },
+
         /////////////////////
         // Token calls    //
         ////////////////////
@@ -194,7 +205,7 @@ export default new Vuex.Store({
             });
         },
 
-        async allowance({commit, state}, allowanceRequired) {
+        async allowance({commit, state, dispatch}, allowanceRequired) {
             console.log('allowance TX', allowanceRequired);
 
             return new Promise((resolve, reject) => {
@@ -211,7 +222,7 @@ export default new Vuex.Store({
                         // notification popup
                         state.notifyInstance.hash(hash);
                     })
-                    .on('receipt', function (receipt) {
+                    .once('receipt', function (receipt) {
                         console.log('receipt', receipt);
 
                         dispatch('approvedBalance');
@@ -231,7 +242,7 @@ export default new Vuex.Store({
             commit('member', member);
         },
 
-        async submitProposal({commit, state}, form) {
+        async submitProposal({commit, state, dispatch}, form) {
             console.log('submitProposal TX', form);
 
             return new Promise((resolve, reject) => {
@@ -251,7 +262,7 @@ export default new Vuex.Store({
                         // notification popup
                         state.notifyInstance.hash(hash);
                     })
-                    .on('receipt', function (receipt) {
+                    .once('receipt', function (receipt) {
                         resolve(receipt);
 
                         dispatch('tokenBalance');

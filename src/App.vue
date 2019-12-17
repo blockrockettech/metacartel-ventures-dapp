@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div v-if="account">
-            <form-wizard @on-complete="onComplete" shape="circle" color="#e74c3c">
+            <form-wizard @on-complete="onComplete" shape="circle" color="#fd0c61">
                 <p slot="title"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></p>
                 <tab-content title="Submit proposal" :before-change="submitProposal">
                     <div class="jumbotron">
@@ -224,7 +224,29 @@
 </script>
 
 <style lang="scss">
+
+
+    // Your variable overrides can go here, e.g.:
+    // $h1-font-size: 3rem;
+
+    @import "./assets/_variables";
     @import '../node_modules/bootstrap/scss/bootstrap';
+    @import "./assets/bootswatch";
+
+    code {
+        color: $xcopy1;
+    }
+
+    .vue-form-wizard .wizard-icon-circle {
+        background-color: $xcopy1 !important;
+        border-color: $xcopy2 !important;
+
+        .step-title {
+            color: $xcopy2 !important;;
+        }
+    }
+
+
 
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s

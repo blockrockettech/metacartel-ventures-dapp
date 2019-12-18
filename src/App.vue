@@ -5,10 +5,24 @@
                 <p slot="title"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></p>
                 <tab-content title="Prepare proposal" :before-change="prepareProposal">
                     <div class="jumbotron">
-                        <p class="lead">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
-                        <hr class="my-4">
-                        <p>Your applicant address is <code>{{ account }}</code></p>
-                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
+                        <div class="row">
+                            <div class="col">
+                                <p class="lead">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
+                                <p>Applicant address <code>{{ account }}</code></p>
+                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-light text-white mb-3">
+                                    <div class="card-header">Your Proposal</div>
+                                    <div class="card-body">
+                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
+                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
+                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
+                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr class="my-4">
                         <b-form>
                             <b-form-group
@@ -66,15 +80,39 @@
 
                 <tab-content title="wEth balance check" :before-change="convertEthToWeth">
                     <div class="jumbotron">
-                        <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
-                        <hr class="my-4">
-                        <p>Applicant <code>{{ account }}</code></p>
-                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
-                        <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
+                        <div class="row">
+                            <div class="col">
+                                <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
+                                <p>Applicant address <code>{{ account }}</code></p>
+                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-light text-white mb-3">
+                                    <div class="card-header">Your Proposal</div>
+                                    <div class="card-body">
+                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
+                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
+                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
+                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-6" v-if="tokenBalance">
                                 <div class="row">
+                                    <div class="col-6">
+                                        <div class="card bg-light text-white mb-3">
+                                            <div class="card-header">ETH Balance</div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    {{ accountBalanceInEth }} ETH
+                                                </h5>
+                                                <p class="card-text">Your current ETH balance.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-6">
                                         <div class="card bg-info text-white mb-3">
                                             <div class="card-header">wETH Balance</div>
@@ -83,17 +121,6 @@
                                                     {{ toEther(tokenBalance) }} {{ tokenSymbol }}
                                                 </h5>
                                                 <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card bg-danger text-white mb-3">
-                                            <div class="card-header">ETH Balance</div>
-                                            <div class="card-body">
-                                                <h5 class="card-title">
-                                                    {{ accountBalanceInEth }} ETH
-                                                </h5>
-                                                <p class="card-text">Your current ETH balance.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -121,11 +148,24 @@
 
                 <tab-content title="wEth approval check" :before-change="approveAllowance">
                     <div class="jumbotron">
-                        <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
-                        <hr class="my-4">
-                        <p>Applicant <code>{{ account }}</code></p>
-                        <p v-if="molochContract">The Moloch DAO address is <code>{{ molochContract._address }}</code></p>
-                        <p v-if="wethContract">{{ tokenSymbol }} smart contract token address is <code>{{ wethContract._address }}</code></p>
+                        <div class="row">
+                            <div class="col">
+                                <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
+                                <p>Applicant address <code>{{ account }}</code></p>
+                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-light text-white mb-3">
+                                    <div class="card-header">Your Proposal</div>
+                                    <div class="card-body">
+                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
+                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
+                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
+                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-4" v-if="tokenBalance">
@@ -171,7 +211,24 @@
 
                 <tab-content title="Submit proposal" :before-change="submitProposal">
                     <div class="jumbotron">
-                        <p class="lead">This is where you can check everything before submitting to the DAO</p>
+                        <div class="row">
+                            <div class="col">
+                                <p class="lead">This is where you can check everything before submitting to the DAO</p>
+                                <p>Applicant address <code>{{ account }}</code></p>
+                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-light text-white mb-3">
+                                    <div class="card-header">Your Proposal</div>
+                                    <div class="card-body">
+                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
+                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
+                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
+                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr class="my-4">
                         <div class="row">
                             <div class="col">
@@ -262,6 +319,7 @@
                 return new BN(this.approvedBalance);
             },
             accountBalanceInEth() {
+                if (!this.accountBalance) return null;
                 return Number(fromWei(this.accountBalance)).toFixed(4);
             }
         },
@@ -299,12 +357,13 @@
 
                 return new Promise((resolve, reject) => {
                     try {
+
                         if (this.tokenBalanceAsBN.lt(this.tributeOfferedAsWei)) {
                             const wEthRequiredInWei = this.tributeOfferedAsWei.sub(this.tokenBalanceAsBN);
-                            const wEthRequired = fromWei(wEthRequiredInWei, 'ether').toString();
-                            this.$store.dispatch('deposit', wEthRequired)
+                            console.log(wEthRequiredInWei);
+
+                            this.$store.dispatch('deposit', wEthRequiredInWei)
                                 .then(() => {
-                                    console.log('DONE');
                                     resolve(true);
                                 });
                         } else {
@@ -323,7 +382,7 @@
                 return new Promise((resolve, reject) => {
                     try {
                         if (this.approvedBalanceAsBN.lt(this.tributeOfferedAsWei)) {
-                            this.$store.dispatch('allowance', this.form.tributeOffered)
+                            this.$store.dispatch('allowance', this.tributeOfferedAsWei)
                                 .then(() => {
                                     console.log('DONE');
                                     resolve(true);

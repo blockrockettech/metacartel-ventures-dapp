@@ -177,13 +177,13 @@ export default new Vuex.Store({
         },
 
         async deposit({commit, state, dispatch}, wethRequiredInWei) {
-            console.log('deposit TX', wethRequiredInWei);
+            console.log('deposit TX', wethRequiredInWei.toString());
 
             return new Promise((resolve, reject) => {
                 state.wethContract.methods.deposit()
                     .send({
                         from: state.account,
-                        value: wethRequiredInWei,
+                        value: wethRequiredInWei.toString(),
                     })
                     .once('transactionHash', (hash) => {
                         console.log('hash', hash);
@@ -206,12 +206,12 @@ export default new Vuex.Store({
         },
 
         async allowance({commit, state, dispatch}, allowanceRequiredInWei) {
-            console.log('allowance TX', allowanceRequiredInWei);
+            console.log('allowance TX', allowanceRequiredInWei.toString());
 
             return new Promise((resolve, reject) => {
                 state.wethContract.methods.approve(
                     state.molochContract._address,
-                    allowanceRequiredInWei
+                    allowanceRequiredInWei.toString()
                 )
                     .send({
                         from: state.account

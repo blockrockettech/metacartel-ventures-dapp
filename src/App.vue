@@ -6,24 +6,14 @@
                 <tab-content title="Prepare proposal" :before-change="prepareProposal">
                     <div class="jumbotron">
                         <div class="row">
-                            <div class="col">
-                                <p class="lead">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
-                                <p>Applicant address <code>{{ account }}</code></p>
-                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            <div class="col-12 col-sm-8">
+                                <p class="lead text-light">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
+                                <p>Applicant <code>{{ account }}</code></p>
                             </div>
-                            <div class="col">
-                                <div class="card bg-light text-white mb-3">
-                                    <div class="card-header">Your Proposal</div>
-                                    <div class="card-body">
-                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
-                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
-                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
-                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-sm-4">
                             </div>
                         </div>
-                        <hr class="my-4">
+                        <hr class="my-2">
                         <b-form>
                             <b-form-group
                                     id="input-group-1"
@@ -81,24 +71,14 @@
                 <tab-content title="wEth balance check" :before-change="convertEthToWeth">
                     <div class="jumbotron">
                         <div class="row">
-                            <div class="col">
-                                <p class="lead">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
-                                <p>Applicant address <code>{{ account }}</code></p>
-                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            <div class="col-12 col-sm-6">
+                                <p class="lead text-light">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
                             </div>
-                            <div class="col">
-                                <div class="card bg-light text-white mb-3">
-                                    <div class="card-header">Your Proposal</div>
-                                    <div class="card-body">
-                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
-                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
-                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
-                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-sm-6">
+                                <proposal-card :form="form" :applicant="account"></proposal-card>
                             </div>
                         </div>
-                        <hr class="my-4">
+                        <hr class="my-2">
                         <div class="row">
                             <div class="col-6" v-if="tokenBalance">
                                 <div class="row">
@@ -120,7 +100,7 @@
                                                 <h5 class="card-title">
                                                     {{ toEther(tokenBalance) }} {{ tokenSymbol }}
                                                 </h5>
-                                                <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
+                                                <p class="card-text">Balance of {{ tokenSymbol }}.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -128,8 +108,9 @@
                             </div>
                             <div class="col-6" v-if="tokenBalance && parseFloat(toEther(tokenBalance)) < parseFloat(form.tributeOffered)">
                                 <div class="alert alert-warning">
-                                    You don't have enough wEth to submit your proposal of <strong>{{ form.tributeOffered }} {{ tokenSymbol }}</strong>.
-                                    You require <strong>{{ parseFloat(form.tributeOffered) - parseFloat(toEther(tokenBalance)) }} {{ tokenSymbol }}</strong> more.
+                                    You don't have enough wEth!<br/><br/>
+                                    Tribute is <strong>{{ form.tributeOffered }}</strong> {{ tokenSymbol }}.<br/>
+                                    Therefore you need to convert <strong>{{ parseFloat(form.tributeOffered) - parseFloat(toEther(tokenBalance)) }}</strong> ETH to {{ tokenSymbol }}.
                                     <br/>
                                     <br/>
                                     Clicking "Next" will trigger a transaction to convert the required ETH to wETH in order for you to proceed.
@@ -149,24 +130,14 @@
                 <tab-content title="wEth approval check" :before-change="approveAllowance">
                     <div class="jumbotron">
                         <div class="row">
-                            <div class="col">
-                                <p class="lead">This is where you can check your balances and if you are ready to submit a proposal</p>
-                                <p>Applicant address <code>{{ account }}</code></p>
-                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            <div class="col-12 col-sm-6">
+                                <p class="lead text-light">This is where you can check your balances and if you are ready to submit a proposal</p>
                             </div>
-                            <div class="col">
-                                <div class="card bg-light text-white mb-3">
-                                    <div class="card-header">Your Proposal</div>
-                                    <div class="card-body">
-                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
-                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
-                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
-                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-sm-6">
+                                <proposal-card :form="form" :applicant="account"></proposal-card>
                             </div>
                         </div>
-                        <hr class="my-4">
+                        <hr class="my-2">
                         <div class="row">
                             <div class="col-4" v-if="tokenBalance">
                                 <div class="card bg-info text-white mb-3">
@@ -176,7 +147,7 @@
                                             {{ toEther(tokenBalance) }} {{ tokenSymbol }}
                                         </h5>
                                         <p class="card-text">This is your personal balance of {{ tokenSymbol }}.</p>
-                                        <p class="card-text">We use the approval ERC20 process to move your proposal tribute on proposal submission.</p>
+                                        <p class="card-text">Transfer of the tribute uses ERC20 approval.</p>
                                     </div>
                                 </div>
                             </div>
@@ -195,14 +166,14 @@
                             </div>
                             <div class="col-4" v-if="approvedBalance && parseFloat(toEther(approvedBalance)) < parseFloat(form.tributeOffered)">
                                 <div class="alert alert-warning">
-                                    Your allowance is less than required. <br/>
-                                    Two transactions will occur on completion, one for approval, and one for a the DAO proposal.
+                                    Your allowance is less than required. <br/><br/>
+                                    Clicking "Next" will trigger a transaction to approve and allowance from you to the DAO to take the tribute on proposal submission.
                                 </div>
                             </div>
                             <div class="col-4" v-else>
                                 <div class="alert alert-info">
-                                    You have enough approved allowance. <br/>
-                                    One transaction will occur on completion for the DAO proposal.
+                                    You have enough approved allowance. <br/><br/>
+                                    Nothing to see here - move on.
                                 </div>
                             </div>
                         </div>
@@ -212,27 +183,20 @@
                 <tab-content title="Submit proposal" :before-change="submitProposal">
                     <div class="jumbotron">
                         <div class="row">
-                            <div class="col">
-                                <p class="lead">This is where you can check everything before submitting to the DAO</p>
-                                <p>Applicant address <code>{{ account }}</code></p>
-                                <p v-if="molochContract">DAO address <code>{{ molochContract._address }}</code></p>
+                            <div class="col-12 col-sm-6">
+                                <p class="lead text-light">This is where you can check everything before submitting to the DAO</p>
                             </div>
-                            <div class="col">
-                                <div class="card bg-light text-white mb-3">
-                                    <div class="card-header">Your Proposal</div>
-                                    <div class="card-body">
-                                        <p class="card-text"><span class="text-dark">Applicant:</span> <code>{{ account }}</code></p>
-                                        <p class="card-text"><span class="text-dark">Shares:</span> {{ form.sharesRequested }}</p>
-                                        <p class="card-text"><span class="text-dark">Tribute:</span> {{ form.tributeOffered }}</p>
-                                        <p class="card-text"><span class="text-dark">Details:</span> {{ form.details }}</p>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-sm-6">
+                                <proposal-card :form="form" :applicant="account"></proposal-card>
                             </div>
                         </div>
-                        <hr class="my-4">
+                        <hr class="my-2">
                         <div class="row">
-                            <div class="col">
-                                <p>Click "next" to go for it</p>
+                            <div class="col-6"></div>
+                            <div class="col-6">
+                                <div class="alert alert-info">
+                                    Clicking "next" will submit your proposal to the DAO.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -240,15 +204,15 @@
 
                 <tab-content title="Summary">
                     <div class="jumbotron">
-                        <p class="lead">This is where you can see you proposal</p>
-                        <hr class="my-4">
+                        <p class="lead text-light">You have made it...</p>
+                        <hr class="my-2">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6">
                                 <div class="alert alert-success">
-                                    Proposal submitted!
-                                </div>
-                                <div>
-                                    {{ member }}
+                                    BOOM! <br/><br/>
+                                    Proposal submitted! Next step will be sponsorship of the proposal by an existing delegate.
                                 </div>
                             </div>
                         </div>
@@ -259,11 +223,19 @@
                     <router-view></router-view>
                 </transition>
             </form-wizard>
+
+            <div class="my-4">
+                <p v-if="molochContract">MetaCartel Ventures DAO address <code>{{ molochContract._address }}</code></p>
+                <p v-if="wethContract">wETH address <code>{{ wethContract._address }}</code></p>
+            </div>
         </div>
         <div v-else class="mt-5">
-            <h1 class="text-center"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></h1>
-            <p class="text-center">This DAO is on the blockchain - please sign in to make a proposal</p>
+            <h1 class="text-center"><img src="./assets/meta_chill+copy.png" style="max-height: 300px"/></h1>
+            <p class="text-center">The MetaCartel Ventures DAO is on the blockchain</p>
+            <p class="text-center">Please sign in with Web3 to submit a proposal</p>
             <button class="btn btn-outline-info btn-lg btn-block" @click="onLogin">Sign in</button>
+
+            <p class="my-4 text-center text-warning">REMEMBER THIS IS CURRENTLY ON RINKEBY</p>
         </div>
     </div>
 </template>
@@ -274,6 +246,7 @@
     import web3Connect from '@/web3ConnectService';
 
     import {utils} from 'web3';
+    import ProposalCard from "./components/ProposalCard";
     const {BN, fromWei} = utils;
 
     export default {
@@ -291,6 +264,7 @@
             };
         },
         components: {
+            ProposalCard,
             CurrentNetwork
         },
         computed: {
@@ -382,9 +356,8 @@
                 return new Promise((resolve, reject) => {
                     try {
                         if (this.approvedBalanceAsBN.lt(this.tributeOfferedAsWei)) {
-                            this.$store.dispatch('allowance', this.tributeOfferedAsWei)
+                            this.$store.dispatch('allowance', this.tributeOfferedAsWei.sub(this.approvedBalanceAsBN))
                                 .then(() => {
-                                    console.log('DONE');
                                     resolve(true);
                                 });
                         } else {

@@ -212,7 +212,8 @@
                             <div class="col-6">
                                 <div class="alert alert-success">
                                     BOOM! <br/><br/>
-                                    Proposal submitted! Next step will be sponsorship of the proposal by an existing delegate.
+                                    Proposal submitted! <br/><br/>
+                                    Now sponsorship of the proposal is required by an existing delegate.
                                 </div>
                             </div>
                         </div>
@@ -231,8 +232,10 @@
         </div>
         <div v-else class="mt-5">
             <h1 class="text-center"><img src="./assets/meta_chill+copy.png" style="max-height: 300px"/></h1>
+
             <p class="text-center">The MetaCartel Ventures DAO is on the blockchain</p>
             <p class="text-center">Please sign in with Web3 to submit a proposal</p>
+
             <button class="btn btn-outline-info btn-lg btn-block" @click="onLogin">Sign in</button>
 
             <p class="my-4 text-center text-warning">REMEMBER THIS IS CURRENTLY ON RINKEBY</p>

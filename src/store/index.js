@@ -245,13 +245,23 @@ export default new Vuex.Store({
         async submitProposal({commit, state, dispatch}, form) {
             console.log('submitProposal TX', form);
 
+            //     address applicant,
+            //     uint256 sharesRequested,
+            //     uint256 lootRequested,
+            //     uint256 tributeOffered,
+            //     address tributeToken,
+            //     uint256 paymentRequested,
+            //     address paymentToken,
+            //     string memory details
+
             return new Promise((resolve, reject) => {
                 state.molochContract.methods.submitProposal(
                     state.account,
                     form.sharesRequested,
+                    '0', // loot
                     state.web3.utils.toWei(form.tributeOffered),
                     state.wethContract._address,
-                    '0',
+                    '0', // payment
                     state.wethContract._address,
                     form.details
                 )

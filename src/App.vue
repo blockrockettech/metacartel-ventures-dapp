@@ -19,7 +19,7 @@
                                     id="input-group-1"
                                     label="Shares requested:"
                                     label-for="input-1"
-                                    description="We recommend a min of 20">
+                                    description="Shares requested: 1 WETH = 1 Share">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.sharesRequested"
@@ -36,13 +36,13 @@
                                     id="input-group-1"
                                     label="Tribute offered in wETH:"
                                     label-for="input-1"
-                                    description="Recommended: a 1 to 1 of shares requested to tribute offered ratio">
+                                    description="Remember: a 1 to 1 of shares to tribute offered ratio is required">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.tributeOffered"
                                         type="number"
-                                        min="1"
-                                        step="1"
+                                        min="0.00000001"
+                                        step="0.00000001"
                                         @input="onFormInput"
                                         v-bind:class="{ 'border-danger': !form.tributeOffered && form.dirty }"
                                         required
@@ -53,7 +53,7 @@
                                     id="input-group-1"
                                     label="Details:"
                                     label-for="input-1"
-                                    description="Some info to help the proposal; maybe a name?">
+                                    description="Some info to help the proposal; maybe a name or a link somewhere?">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.details"
@@ -72,7 +72,7 @@
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <p class="lead text-light">MetaCartel ventures is currently accepting wETH.<br/>This is where can check you wETH balance and convert more if needed</p>
+                                <p class="lead text-light">MetaCartel Ventures DAO is currently only accepting wETH.<br/><br/>This is where can check you wETH balance and convert more if needed</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <proposal-card :form="form" :applicant="account"></proposal-card>
@@ -131,7 +131,7 @@
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <p class="lead text-light">This is where you can check your balances and if you are ready to submit a proposal</p>
+                                <p class="lead text-light">This is where you can check your balances and if you are happy to submit a proposal</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <proposal-card :form="form" :applicant="account"></proposal-card>
@@ -184,7 +184,7 @@
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <p class="lead text-light">This is where you can check everything before submitting to the DAO</p>
+                                <p class="lead text-light">This is where you can check everything before submitting to the MetaCartel Ventures DAO</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <proposal-card :form="form" :applicant="account"></proposal-card>
@@ -204,16 +204,15 @@
 
                 <tab-content title="Summary">
                     <div class="jumbotron">
-                        <p class="lead text-light">You have made it...</p>
+                        <p class="lead text-light">Your proposal has been successfully submitted!</p>
                         <hr class="my-2">
                         <div class="row">
                             <div class="col-6">
                             </div>
                             <div class="col-6">
                                 <div class="alert alert-success">
-                                    BOOM! <br/><br/>
-                                    Proposal submitted! <br/><br/>
-                                    Now sponsorship of the proposal is required by an existing delegate.
+                                    Victory! <br/><br/>
+                                    Now sponsorship of the proposal is required by an existing delegate...
                                 </div>
                             </div>
                         </div>
@@ -237,8 +236,6 @@
             <p class="text-center">Please sign in with Web3 to submit a proposal</p>
 
             <button class="btn btn-outline-info btn-lg btn-block" @click="onLogin">Sign in</button>
-
-            <p class="my-4 text-center text-warning">REMEMBER THIS IS CURRENTLY ON RINKEBY</p>
         </div>
     </div>
 </template>
@@ -250,7 +247,7 @@
 
     import {utils} from 'web3';
     import ProposalCard from "./components/ProposalCard";
-    const {BN, fromWei} = utils;
+    const {BN, fromWei, toWei} = utils;
 
     export default {
         name: 'App',
@@ -287,7 +284,7 @@
                 'toEtherFixed',
             ]),
             tributeOfferedAsWei() {
-                return new BN(this.form.tributeOffered).mul(new BN('10').pow(new BN('18')));
+                return new BN(toWei(this.form.tributeOffered));
             },
             tokenBalanceAsBN() {
                 return new BN(this.tokenBalance);
@@ -310,7 +307,7 @@
             },
 
             onComplete: function () {
-                alert('Yay. Done!');
+                alert('Yay. You have submitted a MCV proposal!');
             },
 
             isFormValid() {
@@ -330,7 +327,7 @@
             },
 
             convertEthToWeth() {
-                console.log('Convert ETH to wETH');
+                console.log('Convert ETH to wETH: ' + this.tributeOfferedAsWei);
 
                 return new Promise((resolve, reject) => {
                     try {
@@ -406,7 +403,7 @@
 
     .vue-form-wizard .wizard-icon-circle {
         background-color: $xcopy1 !important;
-        border-color: $xcopy3 !important;
+        border-color: $xcopy2 !important;
 
         .step-title {
             color: $xcopy3 !important;;

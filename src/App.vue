@@ -19,7 +19,7 @@
                                     id="input-group-1"
                                     label="Shares requested:"
                                     label-for="input-1"
-                                    description="Shares requested: 1 WETH = 1 Share">
+                                    description="1 wETH = 10 DAO Shares or 100 wETH = 1000 DAO Shares">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.sharesRequested"
@@ -36,7 +36,7 @@
                                     id="input-group-1"
                                     label="Tribute offered in wETH:"
                                     label-for="input-1"
-                                    description="Remember: a 1 to 1 of shares to tribute offered ratio is required">
+                                    description="Remember: a 1 wETH tribute to 10 DAO shares ratio is required">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.tributeOffered"

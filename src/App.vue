@@ -2,12 +2,12 @@
     <div class="container">
         <div v-if="account">
             <form-wizard @on-complete="onComplete" shape="circle" color="#fd0c61">
-                <p slot="title"><img src="./assets/meta_chill+copy.png" style="max-height: 100px"/></p>
+                <p slot="title"><img src="./assets/hegic.png" style="max-height: 100px"/></p>
                 <tab-content title="Prepare proposal" :before-change="prepareProposal">
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-8">
-                                <p class="lead text-light">This is where you can submit your proposal to join the MetaCartel Ventures DAO</p>
+                                <p class="lead text-light">This is where you can submit your proposal to join the Hegic DAO</p>
                                 <p>Applicant <code>{{ account }}</code></p>
                             </div>
                             <div class="col-12 col-sm-4">
@@ -19,7 +19,7 @@
                                     id="input-group-1"
                                     label="Shares requested:"
                                     label-for="input-1"
-                                    description="1 wETH = 10 DAO Shares or 100 wETH = 1000 DAO Shares">
+                                    description="1 share = 1 wETH">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.sharesRequested"
@@ -36,7 +36,7 @@
                                     id="input-group-1"
                                     label="Tribute offered in wETH:"
                                     label-for="input-1"
-                                    description="Remember: a 1 wETH tribute to 10 DAO shares ratio is required">
+                                    description="Remember: a 1 wETH tribute to 1 DAO shares ratio is required">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.tributeOffered"
@@ -72,7 +72,7 @@
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <p class="lead text-light">MetaCartel Ventures DAO is currently only accepting wETH.<br/><br/>This is where can check you wETH balance and convert more if needed</p>
+                                <p class="lead text-light">Hegic DAO is currently only accepting wETH.<br/><br/>This is where can check you wETH balance and convert more if needed</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <proposal-card :form="form" :applicant="account"></proposal-card>
@@ -184,7 +184,7 @@
                     <div class="jumbotron">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <p class="lead text-light">This is where you can check everything before submitting to the MetaCartel Ventures DAO</p>
+                                <p class="lead text-light">This is where you can check everything before submitting to the Hegic DAO</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <proposal-card :form="form" :applicant="account"></proposal-card>
@@ -225,14 +225,14 @@
             </form-wizard>
 
             <div class="my-4">
-                <p v-if="molochContract">MetaCartel Ventures DAO address <code>{{ molochContract._address }}</code></p>
+                <p v-if="molochContract">Hegic DAO address <code>{{ molochContract._address }}</code></p>
                 <p v-if="wethContract">wETH address <code>{{ wethContract._address }}</code></p>
             </div>
         </div>
         <div v-else class="mt-5">
-            <h1 class="text-center"><img src="./assets/meta_chill+copy.png" style="max-height: 300px"/></h1>
+            <h1 class="text-center mb-5"><img src="./assets/hegic.png" style="max-height: 150px"/></h1>
 
-            <p class="text-center">The MetaCartel Ventures DAO is on the blockchain</p>
+            <p class="text-center">The Hegic DAO is on the blockchain</p>
             <p class="text-center">Please sign in with Web3 to submit a proposal</p>
 
             <button class="btn btn-outline-info btn-lg btn-block" @click="onLogin">Sign in</button>

@@ -11,6 +11,6 @@ PACKAGE_VERSION=$(cat package.json \
 npm run build;
 
 echo "Deploying version $PACKAGE_VERSION to PRODUCTION"
-firebase use mcv-onboarder;
-firebase deploy --only hosting:mcv-onboarder;
+firebase use hegic-onboarder;
+firebase deploy --only hosting:hegic-onboarder;
 

@@ -36,7 +36,7 @@
                                     id="input-group-1"
                                     label="Tribute offered in wETH:"
                                     label-for="input-1"
-                                    description="Remember: a 1 wETH tribute to 10 DAO shares ratio is required">
+                                    description="Remember: check the onboarding guide sheet">
                                 <b-form-input
                                         id="input-1"
                                         v-model="form.tributeOffered"
